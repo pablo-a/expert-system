@@ -124,34 +124,6 @@ def	split_tab(tab, cut_list):       #   Split all tab by space char
 	for i in tab:
 		cut_list.extend(i.split(' '))
 
-def special_case(string):       #   Check if the element is a "=VAR" or "?VAR"
-        #expression = inhibit_bracket(string)
-	expression = string
-	if expression[0] in ['?', '='] and expression[1:].isalpha():
-		return 1
-	elif expression[0] == '!' and expression[1].isalpha() and len(expression) == (2 if string == expression else 1):
-                #print expression
-		return 1
-#	elif (expression[len(expression) - 1] == ')'
-#		and expression[:len(expression) - 1].isalpha):
-#                print expression
-#		return 1
-	return 0
-
-def	check_lexic(cut_list):      #   Check if the string is lexical correct
-	for j in cut_list:
-            if ((j not in operand_n) and not j.isalpha() and
-		not special_case(j)) or (len(j) > 1 and j.isalpha()):
-		error_case("Error: Bad character [" + j + ']')
-
-#def inhibit_bracket(string):        #  Return a string whiout bracket to test the element
-#        newString = ""
-
-#        for i in string:
-#            if i not in ['(', ')']:
-#                newString += i
-#        return newString
-
 def	concat_list(cut_list):      #   Check and concatenate the initialisations and question lines in tab
 	for index, this in enumerate(cut_list):
 	    for that in cut_list[index + 1:]:
@@ -169,11 +141,7 @@ def parse_tab(tab):
 	not_assigned(tab)
 	min_step(tab)
 	split_tab(tab, cut_list)
-	#print("before: ", cut_list)
-	#check_lexic(cut_list)
 	concat_list(cut_list)
-	#print("afteeeeeeer")
-	#print("after: ", cut_list)
 	tab = cut_list
 
 def main():
