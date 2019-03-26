@@ -72,7 +72,10 @@ def missingBracket(string):  # Check if missing bracket in string
 def bracketBadFormat(string):  # Check if open bracket is before close bracket
     #	Flag to know if steps are pass
     flag = 0
+    empty = "()"
 
+    if empty in string:
+        error_case(f"Error: Bad parenthesis in \"{string}\"")
     for i in string:
         if i in ['(', ')']:
             if i == ')' and not (flag & 1):

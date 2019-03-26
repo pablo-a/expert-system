@@ -1,0 +1,10 @@
+A + B => C
+A())( => B
+D | E => C
+C ^ F => G
+V | O => (A | B))R | I)
+E | (D + A + B) => !F
+!(G + (!C | F)) + B ^ (A + F) => Z
+
+=ABD
+?GZE
