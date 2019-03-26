@@ -32,27 +32,32 @@ def check(tab):     #   Check if open file is possible and if eatch line is vali
 		except IOError as e:
 			error_case(f"Error: File can't by open : {e}")
 		for line in input_file:
-
-			# don't care for empty lines
-			if empty_line(line):
-				continue
-
-			# remove leading/trailing whitespaces
-			line = line.strip()
-
-			# remove comment parts.
-			tmp = valide_line(line)
-			if tmp > 0:
-				tab.append(line[:tmp])
+			remove_empty_and_comments(tab, line)
 	else:
 		error_case("Error: File doesn't exist")
 
-def valide_line(line):      #   Check if there are comment in line
-	tmp = line.find("#")
-	if tmp == -1:
-		return len(line)
+def remove_empty_and_comments(tab, line):
+	# don't care for empty lines
+	if is_empty(line):
+		return
+
+	# remove leading/trailing whitespaces
+	line = line.strip()
+
+	# remove comment parts.
+	if is_comment(line):
+		line_without_comment = line.split("#")[0]
+		if (line_without_comment.strip() == ""):
+			return
+		tab.append(line_without_comment)
 	else:
-		return tmp
+		tab.append(line)
+
+def is_comment(line):
+	return True if "#" in line else False
+
+def is_empty(line):
+	return True if line == "\n" else False
 
 def translate(tab):         #   Tranform all litteral expression in symbol expression
 	
@@ -63,9 +68,6 @@ def translate(tab):         #   Tranform all litteral expression in symbol expre
 		if i in tab.lower():
 			tab = tab.replace(i, operand_n[operand_l.index(i)])
 	return tab.strip()
-
-def empty_line(line):
-	return True if line == "\n" else False
 
 
 if __name__ == '__main__':
