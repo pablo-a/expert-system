@@ -1,0 +1,6 @@
+# Test same conclusions for different rules.
+A => B
+C => B
+
+=A
+?B

@@ -1,3 +1,4 @@
+from main import error_case, operand_n
 
 def parse_tab(tab):
     cut_list = []
@@ -24,11 +25,11 @@ def checkTwoSide(string):       #   Split the string at the delimiter
     for i in splitAffectation:
         whichCase = missingBracket(i)
         if whichCase == 1:
-	    error_case("Error: Missing bracket in [" + string + ']')
+            error_case("Error: Missing bracket in [" + string + ']')
         elif whichCase == 2:
-	    error_case("Error: Missing a ')' bracket in [" + string + ']')
+	        error_case("Error: Missing a ')' bracket in [" + string + ']')
         elif whichCase == 3:
-	    error_case("Error: Missing a '(' bracket in [" + string + ']')
+	        error_case("Error: Missing a '(' bracket in [" + string + ']')
     return 0
 
 def not_assigned(tab):      #	Check if there are a good assignation expression
