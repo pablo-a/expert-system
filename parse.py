@@ -11,13 +11,8 @@ def parse_tab(tab):
     not_assigned(tab)
     # Check if all steps are here (rules, facts, target)
     min_step(tab)
-    # Tokenise
-    split_tab(tab, cut_list)
     # Merge multiline facts/questions in 1 token
-    concat_list(cut_list)
-
-    # FIXME : What does this aim to do ?
-    tab = cut_list
+    concat_list(tab)
 
 def del_same(tab):  # Delete same line in tab
 	for val, second in enumerate(tab):
@@ -95,7 +90,7 @@ def min_step(tab):  # Check if there are a minimum steps to be resolv
 		for operator in operand_n:
 			if not flag and operator in line:
 				flag |= 1
-		if line[0] in ['?', '='] and line[1].isalpha():
+		if line == "=" or (line[0] in ['?', '='] and line[1].isalpha()):
 			flag |= (4 if line[0] == '?' else 2)
 	if not ((flag & 1) and (flag & 2) and (flag & 4)):
 		if not (flag & 1):
@@ -105,17 +100,13 @@ def min_step(tab):  # Check if there are a minimum steps to be resolv
 		if not (flag & 4):
 			print(err[0] + err[4] + err[1])
 		sys.exit()
-
-
-def split_tab(tab, cut_list):  # Split all tab by space char
-	for i in tab:
-		cut_list.extend(i.split(' '))
-
-
+        
 def concat_list(cut_list):  # Check and concatenate the initialisations and question lines in tab
     for index, token in enumerate(cut_list):
+        if not (token[0] in ['=', '?']) or token == "=":
+            continue
         for next_token in cut_list[index + 1:]:
-            if (token[0] in ['=', '?']) and (token[0] == next_token[0]) and token[1:].isalpha():
+            if (token[0] == next_token[0]) and token[1:].isalpha():
                 if (token == next_token):
                     cut_list.remove(next_token)
                     break
