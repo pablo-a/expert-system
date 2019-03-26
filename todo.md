@@ -7,7 +7,7 @@
     query:  B
     facts:  A
     ```
-- [ ] Comment handling to refactor
+- [x] Comment handling to refactor
 - [ ] Parenthesis handling to FIX.
 - [ ] Empty facts crashes:
     ```
