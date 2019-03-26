@@ -68,7 +68,6 @@ def missingBracket(string):  # Check if missing bracket in string
         return 2 if counterBracket > 0 else 3
     return bracketBadFormat(string)
 
-# FIXME : It doesnt work properly : A())( => B works ...
 def bracketBadFormat(string):  # Check if open bracket is before close bracket
     #	Flag to know if steps are pass
     flag = 0
