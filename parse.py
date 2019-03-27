@@ -1,4 +1,4 @@
-from main import operand_n, error_case
+from main import operand_n, raise_parsing_error
 from exception import ParsingError
 import sys
 import os
@@ -6,7 +6,7 @@ import os
 def parse_file(file_path, tab):
     check(file_path, tab)
     if not tab:
-        error_case("Error: Empty file")
+        raise_parsing_error("Error: Empty file")
     for id, e in enumerate(tab):
         tab[id] = translate(e)
     parse_tab(tab)
@@ -18,11 +18,11 @@ def check(file_path, tab):
 		try:
 			input_file = open(file_path, "r")
 		except IOError as e:
-			error_case(f"Error: File can't by open : {e}")
+			raise_parsing_error(f"Error: File can't by open : {e}")
 		for line in input_file:
 			remove_empty_and_comments(tab, line)
 	else:
-		error_case("Error: File doesn't exist")
+		raise_parsing_error("Error: File doesn't exist")
 
 def parse_tab(tab):
     # rules must be unique
@@ -62,11 +62,11 @@ def checkTwoSide(string):  # Split the string at the delimiter
         whichCase = missingBracket(i)
         # FIXME : case 1 never appears.
         if whichCase == 1:
-	        error_case("Error: Missing bracket in [" + string + ']')
+	        raise_parsing_error("Error: Missing bracket in [" + string + ']')
         elif whichCase == 2:
-	        error_case("Error: Missing a ')' bracket in [" + string + ']')
+	        raise_parsing_error("Error: Missing a ')' bracket in [" + string + ']')
         elif whichCase == 3:
-	        error_case("Error: Missing a '(' bracket in [" + string + ']')
+	        raise_parsing_error("Error: Missing a '(' bracket in [" + string + ']')
     return 0
 
 def missingBracket(string):  # Check if missing bracket in string
@@ -89,11 +89,11 @@ def bracketBadFormat(string):  # Check if open bracket is before close bracket
     empty = "()"
 
     if empty in string:
-        error_case(f"Error: Bad parenthesis in \"{string}\"")
+        raise_parsing_error(f"Error: Bad parenthesis in \"{string}\"")
     for i in string:
         if i in ['(', ')']:
             if i == ')' and not (flag & 1):
-                error_case(f"Error: Declaration of ')' bracket before '(' in \"{string}\"")
+                raise_parsing_error(f"Error: Declaration of ')' bracket before '(' in \"{string}\"")
             elif i == ')':
                 flag |= 2
             elif i == '(':
@@ -114,11 +114,11 @@ def min_step(tab):  # Check if there are a minimum steps to be resolv
 			flag |= (4 if line[0] == '?' else 2)
 	if not ((flag & 1) and (flag & 2) and (flag & 4)):
 		if not (flag & 1):
-			error_case(err[0] + err[2] + err[1])
+			raise_parsing_error(err[0] + err[2] + err[1])
 		if not (flag & 2):
-			error_case(err[0] + err[3] + err[1])
+			raise_parsing_error(err[0] + err[3] + err[1])
 		if not (flag & 4):
-			error_case(err[0] + err[4] + err[1])
+			raise_parsing_error(err[0] + err[4] + err[1])
         
 def concat_list(cut_list):  # Check and concatenate the initialisations and question lines in tab
     for index, token in enumerate(cut_list):

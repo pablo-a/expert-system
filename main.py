@@ -19,7 +19,7 @@ def main(file_path):
 	rules_json(tab)
 		
 
-def error_case(msg):
+def raise_parsing_error(msg):
 	raise ParsingError(msg)
 
 
