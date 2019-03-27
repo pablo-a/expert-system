@@ -1,7 +1,6 @@
 from main import operand_n, error_case
 import sys
 
-# FIXME: this should return new tab instead of affecting new value.
 def parse_tab(tab):
     cut_list = []
 
