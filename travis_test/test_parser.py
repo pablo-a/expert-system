@@ -1,5 +1,8 @@
 import pytest
 import os
+import sys
+# Travis needs this to find parent python files
+sys.path.extend(["../"])
 from exception import ParsingError
 from parse import parse_file
 
@@ -10,7 +13,9 @@ def test_incorrect_files():
         ".",
         "..",
         "/dev/random",
-        "/dev/null"
+        "/dev/null",
+        ".gitignore",
+        "test_files"
     ]
     print("hello")
     run_tests(list_files)
@@ -22,7 +27,7 @@ def test_wrong_files():
 def run_tests(file_list):
     for file_path in file_list:
         tab = []
-        with pytest.raises(ParsingError) as e:
+        with pytest.raises(ParsingError):
             print(f"Testing file : {file_path}")
             parse_file(file_path, tab)
 
