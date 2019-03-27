@@ -26,10 +26,3 @@ class And(Operator):
         return True
 
 
-class Fact():
-
-    def __init__(self, fact):
-        self.data = fact
-
-    def resolve_to_true(self):
-        return True
