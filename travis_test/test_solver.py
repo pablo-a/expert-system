@@ -9,12 +9,8 @@ from operations import And, Or
 my_engine = Engine()
 
 # ADD FACTS
-# => False
 my_engine.add_facts("=ABCD")
 my_engine.add_facts("=Y")
-# my_engine.add_facts("=E")
-# => False
-# engine.add_facts("=AZDE")
 
 # ADD MAIN RULE
 rule_A = And(
@@ -51,7 +47,6 @@ rule_A.flatten()
 
 
 def test_simple():
-    print(my_engine)
     # Already in Facts
     my_engine.add_query("?A")
     assert my_engine.solve() == [True]
@@ -63,4 +58,6 @@ def test_backward():
 
 def test_infinite_loop():
     # Infinite loop
-    pass
+    my_engine.add_facts("=", empty=True)
+    my_engine.add_query("?Y", empty=True)
+    assert my_engine.solve() == [False]
