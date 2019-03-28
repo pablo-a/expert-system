@@ -27,8 +27,15 @@ class Engine:
 
 
 class Fact:
-    def __init__(self, fact):
-        self.data = fact
+
+    def __init__(self, fact, engine):
+        self.name = fact
+        self.engine = engine
+        self.checked = False
+
+    def __str__(self):
+        return self.name
 
     def resolve_to_true(self):
-        return True
+        return self.engine.solve_fact(self)
+        
