@@ -1,4 +1,5 @@
 from engine import Engine, Fact
+from functools import reduce
 
 class Operator:
     "Defines an operator : AND, OR, NOT, XOR, ..."
@@ -69,3 +70,31 @@ class Or(Operator):
     def __str__(self):
         content = super().__str__()
         return "OR" + content
+
+
+class Xor(Operator):
+
+    def resolve_to_true(self):
+        # How Reduce works ?
+        # for array [a, b, c, d, e]
+        # return a ^ b ^ c ^ d ^ e
+        resolved = list(map(lambda x: x.resolve_to_true(), self.operands))
+        return reduce(lambda x, y: x ^ y, resolved)
+
+    def __str__(self):
+        content = super().__str__()
+        return "XOR" + content
+
+
+class Not(Operator):
+
+    def __init__(self, operand):
+        self.operand = operand
+
+    def resolve_to_true(self):
+        # return True if operand is False.
+        return not self.operand.resolve_to_true()
+
+    def __str__(self):
+        return f"NOT({self.operand})"
+
