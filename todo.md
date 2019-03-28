@@ -16,4 +16,4 @@
     query:  B
     facts:  A
     ```
-- [ ] ds
+- [ ] SETUP logging instead of print in Engine.py, operations.py
