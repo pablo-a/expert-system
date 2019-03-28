@@ -1,5 +1,4 @@
-class Engine():
-
+class Engine:
     def __init__(self):
         self.rules = {}
         self.facts = []
@@ -27,8 +26,7 @@ class Engine():
         pass
 
 
-class Fact():
-
+class Fact:
     def __init__(self, fact):
         self.data = fact
 
