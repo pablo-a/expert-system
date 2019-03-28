@@ -14,11 +14,13 @@ class Engine:
         """
         pass
 
-    def add_facts(self, tokenized_line):
+    def add_facts(self, tokenized_line, empty=False):
         """
         Add facts to self.facts array
         Input: "=ABC"
         """
+        if empty:
+            self.facts = set()
 
         if not tokenized_line.startswith("="):
             return
@@ -31,8 +33,9 @@ class Engine:
         Add query item to self.query array
         Input: ?XZY
         """
-        if empty == True:
+        if empty:
             self.query = []
+            
         if not tokenized_line.startswith("?"):
             return
         for char in tokenized_line[1:]:
