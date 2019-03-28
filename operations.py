@@ -36,12 +36,19 @@ class Operator:
         return content
         # return (f"({self.left_operand}, {self.right_operand})")
 
+
+class And(Operator):
     def resolve_to_true(self):
         """
             Check if the different operands resolve to True
-            A = B = C = True => AND(A, B, C) = True 
+            A & B & C = True => AND(A, B, C) = True 
         """
         for elem in self.operands:
+            print(f"Checking elem {elem}")
             if not elem.resolve_to_true():
                 return False
         return True
+
+    def __str__(self):
+        content = super().__str__()
+        return "AND" + content
