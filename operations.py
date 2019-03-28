@@ -52,3 +52,20 @@ class And(Operator):
     def __str__(self):
         content = super().__str__()
         return "AND" + content
+
+
+class Or(Operator):
+
+    def resolve_to_true(self):
+        """
+            Check if the different operands resolve to True
+            A | B | C = True => OR(A, B, C) = True 
+        """
+        for elem in self.operands:
+            if elem.resolve_to_true():
+                return True
+        return False
+
+    def __str__(self):
+        content = super().__str__()
+        return "OR" + content
