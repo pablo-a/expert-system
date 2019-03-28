@@ -1,8 +1,11 @@
+import logging
+
 class Engine:
     def __init__(self):
         self.rules = {}
-        self.facts = []
+        self.facts = set()
         self.query = []
+        self.already_checked = []
 
     def add_rule(self, tokenized_line):
         """
@@ -16,14 +19,26 @@ class Engine:
         Add facts to self.facts array
         Input: "=ABC"
         """
-        pass
 
-    def add_query(self, tokenized_line):
+        if not tokenized_line.startswith("="):
+            return
+        for char in tokenized_line[1:]:
+            new_fact = Fact(char, self)
+            self.facts.add(new_fact)
+
+    def add_query(self, tokenized_line, empty=False):
         """
         Add query item to self.query array
         Input: ?XZY
         """
-        pass
+        if empty == True:
+            self.query = []
+        if not tokenized_line.startswith("?"):
+            return
+        for char in tokenized_line[1:]:
+            new_fact = Fact(char, self)
+            self.query.append(new_fact)
+
 ########################## THE METHOD ####################################
     def solve(self):
         solution = []
@@ -70,6 +85,22 @@ class Engine:
 
     def get_rule(self, fact):
         return self.rules[fact.name]
+
+    def __str__(self):
+        string = "Knowledge base :\n"
+        for elem in self.facts:
+            string += f"\t{elem}\n"
+
+        string += "\n"
+        string += "Rules :\n"
+        for elem in self.rules:
+            string += f"\t{elem} : {self.rules[elem]}\n"
+
+        string += "\n"
+        string += "Query :\n"
+        for elem in self.query:
+            string += f"{elem}"
+        return string
 
 
 class Fact:
