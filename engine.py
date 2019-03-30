@@ -1,6 +1,7 @@
 import logging
 import operations
 from fact import Fact
+from exception import ParsingError
 
 
 class Engine:
@@ -9,6 +10,8 @@ class Engine:
         self.facts = set()
         self.query = []
         self.already_checked = []
+
+####################### SETTING UP ENGINE RULES, FACTS, QUERY #################
 
     def add_rule(self, rule, condition):
         """
@@ -39,6 +42,8 @@ class Engine:
         if not tokenized_line.startswith("="):
             return
         for char in tokenized_line[1:]:
+            if char in self.facts:
+                raise ParsingError(f"Facts must be unique : {char} is present twice!")
             new_fact = Fact(char, self)
             self.facts.add(new_fact)
 
@@ -53,10 +58,12 @@ class Engine:
         if not tokenized_line.startswith("?"):
             return
         for char in tokenized_line[1:]:
+            if char in self.facts:
+                raise ParsingError(f"Query must be unique : {char} is present twice!")
             new_fact = Fact(char, self)
             self.query.append(new_fact)
 
-    ########################## SOLVING ####################################
+    ########################## SOLVING ########################################
     def solve(self):
         # TODO: Print solutions And/or return solutions ?
         # FIXME: make solution an instance attribute ?
@@ -112,9 +119,9 @@ class Engine:
     ###################### Engine Printing ######################
 
     def __str__(self):
-        string = "Knowledge base :\n"
+        string = "Knowledge base :"
         for elem in self.facts:
-            string += f"\t{elem}\n"
+            string += f" {elem}"
 
         string += "\n"
         string += "Rules :\n"
@@ -122,7 +129,7 @@ class Engine:
             string += f"\t{elem} : {self.rules[elem]}\n"
 
         string += "\n"
-        string += "Query :\n"
+        string += "Query :"
         for elem in self.query:
-            string += f"{elem}"
+            string += f" {elem}"
         return string
