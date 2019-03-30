@@ -58,6 +58,7 @@ class Engine:
 
     ########################## SOLVING ####################################
     def solve(self):
+        # TODO: Print solutions And/or return solutions ?
         # FIXME: make solution an instance attribute ?
         solution = []
         for query in self.query:
