@@ -66,7 +66,7 @@ def handle_operations_in_conclusion(engine, input):
 def parse_all_rules(engine, input):
     for statement in input:
         conclusion_array = parse_conclusion(engine, statement['conclusion'])
-        rule = parse_rule(statement['rule'])
+        rule = parse_rule(engine, statement['rule'])
 
         for conclusion in conclusion_array:
             engine.add_rule(conclusion, rule)
@@ -81,13 +81,47 @@ def parse_conclusion(engine, conclusions):
 
 ############ PRIORITY #####################
 
+operation_priority = ["!", "+", "|", "^"]
+
 # TODO: Implement
-def parse_rule(rule):
+def parse_rule(engine, rule):
     """
         Return a Fact or Operation insctance equivalent to the rule.
         Input : A + (B | C)
         Output : And(A, Or(B, C))
     """
+    tokens = rule.split()
+    convert_to_fact_instances(engine, tokens)
+    tokens = parse_parenthesis(tokens)
+    print(tokens)
+    return []
+
+def convert_to_fact_instances(engine, tokens):
+    "Convert facts literals to instances of Fact"
+    for index,elem in enumerate(tokens):
+        if isinstance(elem, str):
+            tokens[index] = Fact(elem, engine)
+
+def parse_parenthesis(rule):
+    if not "(" in rule:
+        return rule
+    positions = []
+    for index, token in enumerate(rule):
+        if "(" in token:
+            positions.append(index)
+        elif ")" in token:
+            closing_bracket = index
+            break
+    opening_bracket = positions.pop()
+    rule[opening_bracket:closing_bracket+1] = parse_operations_priority(rule[opening_bracket, closing_bracket+1])
+    parse_parenthesis(rule)
+
+def parse_operations_priority(tokens):
+    for operator in operation_priority:
+        tokens = parse_operator(operator, tokens)
+    return tokens
+    
+def parse_operator(operator, rule):
     return []
 
 
