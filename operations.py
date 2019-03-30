@@ -1,6 +1,7 @@
 from engine import Engine, Fact
 from functools import reduce
 
+
 class Operator:
     "Defines an operator : AND, OR, NOT, XOR, ..."
 
@@ -27,7 +28,6 @@ class Operator:
         for elem in to_remove:
             self.operands.remove(elem)
             self.operands.extend(elem.operands)
-
 
     def __str__(self):
         content = "("
@@ -56,7 +56,6 @@ class And(Operator):
 
 
 class Or(Operator):
-
     def resolve_to_true(self):
         """
             Check if the different operands resolve to True
@@ -73,7 +72,6 @@ class Or(Operator):
 
 
 class Xor(Operator):
-
     def resolve_to_true(self):
         # How Reduce works ?
         # for array [a, b, c, d, e]
@@ -87,7 +85,6 @@ class Xor(Operator):
 
 
 class Not(Operator):
-
     def __init__(self, operand):
         self.operand = operand
 
@@ -97,4 +94,3 @@ class Not(Operator):
 
     def __str__(self):
         return f"NOT({self.operand})"
-

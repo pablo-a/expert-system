@@ -1,4 +1,6 @@
 import logging
+from fact import Fact
+
 
 class Engine:
     def __init__(self):
@@ -35,15 +37,16 @@ class Engine:
         """
         if empty:
             self.query = []
-            
+
         if not tokenized_line.startswith("?"):
             return
         for char in tokenized_line[1:]:
             new_fact = Fact(char, self)
             self.query.append(new_fact)
 
-########################## THE METHOD ####################################
+    ########################## SOLVING ####################################
     def solve(self):
+        # FIXME: make solution an instance attribute ?
         solution = []
         for query in self.query:
             solution.append(self.solve_fact(query))
@@ -51,18 +54,24 @@ class Engine:
         return solution
 
     def solve_fact(self, fact):
+        """
+            Check if a Fact is true or not based on rules & 
+            knowledge base. Returns True or False
+        """
+        # Stop if we have already been here
         if fact.name in self.already_checked:
             print("\tAlready been here, stopping.")
             return False
         self.already_checked.append(fact.name)
 
+        # Check if Fact in knowledge Base
         if self.fact_is_true(fact):
             return True
 
-        # Fetch a condition of truth
+        # find a rule to prove fact.
         try:
             rule = self.get_rule(fact)
-        except KeyError: # means no precendence rule.
+        except KeyError:  # means no precendence rule.
             print(f"\tno rule for fact {fact}")
             return False
 
@@ -73,8 +82,6 @@ class Engine:
         # else it is operators to resolve.
         return rule.resolve_to_true()
 
-###########################################################################
-
     def fact_is_true(self, fact):
         # Check if Fact already in knowledge base
         for elem in self.facts:
@@ -84,10 +91,12 @@ class Engine:
         print(f"\tfact {fact.name} is not in knowledge base")
         return False
 
-########################################################################
+    ########################################################################
 
     def get_rule(self, fact):
         return self.rules[fact.name]
+
+    ###################### Engine Printing ######################
 
     def __str__(self):
         string = "Knowledge base :\n"
@@ -104,18 +113,3 @@ class Engine:
         for elem in self.query:
             string += f"{elem}"
         return string
-
-
-class Fact:
-
-    def __init__(self, fact, engine):
-        self.name = fact
-        self.engine = engine
-        self.checked = False
-
-    def __str__(self):
-        return self.name
-
-    def resolve_to_true(self):
-        return self.engine.solve_fact(self)
-        
