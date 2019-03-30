@@ -148,4 +148,12 @@ def break_input_statement_type(input):
     facts = []
     query = []
 
+    for line in input:
+        if "=>" in line or "<=>" in line:
+            rules.append(line)
+        elif "=" in line:
+            facts.append(line)
+        elif "?" in line:
+            query.append(line)
+
     return [rules, facts, query]
