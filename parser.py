@@ -14,12 +14,7 @@ def setup_engine_rules(engine, input):
     handle_operations_in_conclusion(engine, tokenized_input)
     parse_all_rules(engine, tokenized_input)
 
-def setup_engine_query(engine, input):
-    pass
-
-def setup_engine_facts(engine, input):
-    pass
-    
+########################### BICONDITIONAL #####################################
 
 def handle_biconditional(engine, input):
     for statement in input:
@@ -31,6 +26,18 @@ def handle_biconditional(engine, input):
     # replace "<=>" by "=>" in all statements.
     input_without_bi = map(lambda x: x.replace("<=>", "=>"), input)
     return input_without_bi
+
+def is_biconditional(statement):
+    return True if "<=>" in statement else False
+
+def reverse_statement(statement):
+    splitted = statement.split(" <=> ")
+    splitted.reverse()
+    splitted_with_symbol = [splitted[0], "=>", splitted[1]]
+    merged = " ".join(splitted_with_symbol)
+    return merged
+
+##################### SPLITTING RULES IN 2 ####################################
 
 def cut_statement(input):
     tokenized_input = []
@@ -44,6 +51,8 @@ def cut_statement(input):
         tokenized_input.append(new_statement)
     return tokenized_input
 
+######################## OPERATIONS IN CONCLUSION #############################
+
 # TODO: Implement
 def handle_operations_in_conclusion(engine, input):
     """
@@ -51,6 +60,8 @@ def handle_operations_in_conclusion(engine, input):
     """
     # TODO: Handle OR/XOR operations ?
     pass
+
+###################### PARSING RULES ##########################################
 
 def parse_all_rules(engine, input):
     for statement in input:
@@ -60,10 +71,15 @@ def parse_all_rules(engine, input):
         for conclusion in conclusion_array:
             engine.add_rule(conclusion, rule)
 
+############### CONCLUSION ###############
+
 # TODO: Implement
 def parse_conclusion(engine, conclusions):
     "return an array of Fact from an array of conclusions"
     return []
+
+
+############ PRIORITY #####################
 
 # TODO: Implement
 def parse_rule(rule):
@@ -74,12 +90,4 @@ def parse_rule(rule):
     """
     return []
 
-def is_biconditional(statement):
-    return True if "<=>" in statement else False
 
-def reverse_statement(statement):
-    splitted = statement.split(" <=> ")
-    splitted.reverse()
-    splitted_with_symbol = [splitted[0], "<=>", splitted[1]]
-    merged = " ".join(splitted_with_symbol)
-    return merged
