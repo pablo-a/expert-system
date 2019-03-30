@@ -1,4 +1,5 @@
 import logging
+import operations
 from fact import Fact
 
 
@@ -9,17 +10,28 @@ class Engine:
         self.query = []
         self.already_checked = []
 
-    def add_rule(self, tokenized_line):
+    def add_rule(self, rule, condition):
         """
-        Input: 1 file tokenized line :  A | B + C => D
-        Output: data structure :       OR(A, AND(B, C))
+            Input: Fact(A) , Or("B", "C")
+            Output: data structure :       OR(A, AND(B, C))
         """
-        pass
+        if rule.name in self.rules:
+            self.add_additional_rule(rule, condition)
+        else:
+            self.rules[rule.name] = condition
+
+    def add_additional_rule(self, rule, condition):
+        "In case of different rules for same fact."
+        old_rule = self.rules[rule.name]
+        new_rule = operations.Or(old_rule, condition)
+        # flatten nested Or's.
+        new_rule.flatten()
+        self.rules[rule.name] = new_rule
 
     def add_facts(self, tokenized_line, empty=False):
         """
-        Add facts to self.facts array
-        Input: "=ABC"
+            Add facts to self.facts array
+            Input: "=ABC"
         """
         if empty:
             self.facts = set()
@@ -32,8 +44,8 @@ class Engine:
 
     def add_query(self, tokenized_line, empty=False):
         """
-        Add query item to self.query array
-        Input: ?XZY
+            Add query item to self.query array
+            Input: ?XZY
         """
         if empty:
             self.query = []
