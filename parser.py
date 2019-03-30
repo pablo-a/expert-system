@@ -1,3 +1,13 @@
+from fact import Fact
+
+def setup_engine_query(engine, input):
+    for line in input:
+        engine.add_query(line)
+
+def setup_engine_facts(engine, input):
+    for line in input:
+        engine.add_facts(line)
+
 def setup_engine_rules(engine, input):
     input_without_bi = handle_biconditional(engine, input)
     tokenized_input = cut_statement(input_without_bi)
