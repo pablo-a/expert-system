@@ -21,12 +21,18 @@ def main(file_path):
 
     # break into different type of statements
     rules, facts, query = parse.break_input_statement_type(tab)
+    print(f"rules : {rules}\n\nfacts: {facts}\n\nquery: {query}\n")
 
     # setup engine
     engine = Engine()
-    parser.setup_engine_rules(engine, rules)
-    parser.setup_engine_facts(engine, facts)
-    parser.setup_engine_query(engine, query)
+    try:
+        parser.setup_engine_rules(engine, rules)
+        parser.setup_engine_facts(engine, facts)
+        parser.setup_engine_query(engine, query)
+    except ParsingError as e:
+        exit(e)
+
+    print(engine)
 
     # Solving
     # rules_json(tab)
