@@ -1,4 +1,3 @@
-from engine import Engine, Fact
 from functools import reduce
 
 
