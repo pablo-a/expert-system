@@ -99,7 +99,7 @@ class Engine:
         if isinstance(rule, Fact):
             return self.solve_fact(rule)
         # else it is operators to resolve.
-        return  
+        return rule.resolve_to_true()
 
     def fact_is_true(self, fact):
         # Check if Fact already in knowledge base
