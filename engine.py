@@ -1,5 +1,6 @@
 import logging
 import operations
+from termcolor import colored
 from fact import Fact
 from exception import ParsingError
 
@@ -65,14 +66,12 @@ class Engine:
 
     ########################## SOLVING ########################################
     def solve(self):
-        # TODO: Print solutions And/or return solutions ?
-        # FIXME: make solution an instance attribute ?
-        solution = []
         for query in self.query:
-            solution.append(self.solve_fact(query))
+            print(colored(f"\nAnswer for {query} :", "green"))
+            solution = self.solve_fact(query)
+            print(colored(f"{query} is then {solution}", "red"))
             self.already_checked = []
-        return solution
-
+            
     def solve_fact(self, fact):
         """
             Check if a Fact is true or not based on rules & 
@@ -100,7 +99,7 @@ class Engine:
         if isinstance(rule, Fact):
             return self.solve_fact(rule)
         # else it is operators to resolve.
-        return rule.resolve_to_true()
+        return  
 
     def fact_is_true(self, fact):
         # Check if Fact already in knowledge base
