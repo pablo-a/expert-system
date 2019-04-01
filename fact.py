@@ -14,4 +14,7 @@ class Fact:
 
     def resolve_to_true(self):
         "Backward resolution, return True or False"
-        return self.engine.solve_fact(self)
+        if self.engine.solve_fact(self):
+            self.engine.add_facts('='+self.name)
+            return True
+        return False
