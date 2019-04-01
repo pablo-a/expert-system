@@ -91,16 +91,24 @@ def parse_all_rules(engine, input):
 
 ############### CONCLUSION ###############
 
-# TODO: Implement
 def parse_conclusion(engine, conclusions):
     "return an array of Facts from conclusion"
     parsed = parse_rule(engine, conclusions)
-    logging.critical(colored(f"{parsed}", "magenta"))
 
+    logging.debug(colored(f"PARSING CONCLUSIONS", "green"))
+    logging.debug(colored(f"{parsed}", "magenta"))
+    simplified = simplify_conclusions([parsed], [])
+    logging.debug(colored(f"{util.print_list(simplified)}\n", "cyan"))
 
-    if isinstance(parsed, Fact):
-        return [parsed]
-    return []
+    return simplified
+
+def simplify_conclusions(conclusion, new_conclusion):
+    for elem in conclusion:
+        if isinstance(elem, Fact):
+            new_conclusion.append(elem)
+        elif isinstance(elem, operations.And):
+            simplify_conclusions(elem.operands, new_conclusion)
+    return new_conclusion
 
 
 ############ PRIORITY #####################
@@ -136,21 +144,41 @@ def parse_rule(engine, rule):
 def convert_to_fact_instances(engine, tokens):
     "Convert facts literals to instances of Fact"
     for index,elem in enumerate(tokens):
-        if isinstance(elem, str) and elem.isalpha():
-            tokens[index] = Fact(elem, engine)
+        if isinstance(elem, str):
+            # Case : "(A"
+            if re.match(r"\([a-zA-Z]$", elem):
+                fact = Fact(elem[1], engine)
+                tokens[index:index+1] = ["(", fact]
+            # Case : "A)"
+            elif re.match(r"[a-zA-Z]\)$", elem):
+                fact = Fact(elem[0], engine)
+                tokens[index:index+1] = [fact, ")"]
+            # Nomal case : "A
+            elif re.match(r"[a-zA-Z]$", elem):
+                tokens[index] = Fact(elem, engine)
 
 def parse_parenthesis(rule):
     if not "(" in rule:
         return rule
     positions = []
+    closing_bracket = -1
     for index, token in enumerate(rule):
+        if not isinstance(token, str):
+            continue
         if "(" in token:
             positions.append(index)
         elif ")" in token:
             closing_bracket = index
             break
+    # In case no more parenthesis
+    if closing_bracket < 0:
+        return rule
     opening_bracket = positions.pop()
-    rule[opening_bracket:closing_bracket+1] = parse_operations_priority(rule[opening_bracket, closing_bracket+1])
+
+    # replace expression inside parenthesis
+    # by simplified content.
+    simplified_exp = parse_operations_priority(rule[opening_bracket+1:closing_bracket])
+    rule[opening_bracket:closing_bracket+1] = simplified_exp
     # Tail recursion : simplify the simplified rule until no parenthesis.
     return parse_parenthesis(rule)
 
