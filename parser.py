@@ -69,7 +69,7 @@ def check_negative_operator(rules):
     for statement in rules:
         splitted = statement.split()
         for index, elem in enumerate(splitted):
-            if re.match("\![a-zA-Z]$", elem):
+            if re.match(r"\![a-zA-Z]$", elem):
                 splitted[index:index+1] = ["!", elem[1]]
         joined = " ".join(splitted)
         new_rules.append(joined)
@@ -129,7 +129,7 @@ def parse_rule(engine, rule):
     if len(rule) == 1:
         logging.debug(f"parsed operations : {util.print_list(rule)}")
         return rule[0]
-    logging.critical(f"rule after operation parsing : {util.print_list(rule)}")
+    logging.critical(f"rule before parsing : {util.print_list(rule)}\nrule after operation parsing : {util.print_list(rule)}")
     return []
 
 def convert_to_fact_instances(engine, tokens):
@@ -159,54 +159,36 @@ def parse_operations_priority(tokens):
     for operator, op_class in zip(operation_priority, operation_classes):
         tokens = parse_operator(operator, op_class, tokens)
     return tokens
-    
-    if len(rule) == 1:
-        return rule
 
 def parse_operator(operator, op_class, rule):
-    should_pass_next = 0
+    # No more operations.
     if len(rule) <= 2:
         return rule
-    new_rule = []
+
+    index = 0
     for left_token, middle_token, right_token in util.get_three_by_three(rule):
-        if should_pass_next > 0:
-            should_pass_next -= 1
-            continue
+  
         if middle_token == operator:
             obj = op_class(left_token, right_token)
-            new_rule.append(obj)
-            should_pass_next = 2
-        else:
-            new_rule.append(left_token)
+            rule[index:index+3] = [obj]
+            return parse_operator(operator, op_class, rule)
 
-    # add remaining
-    if should_pass_next == 0:
-        new_rule.append(middle_token)
-        new_rule.append(right_token)
-    if should_pass_next == 1:
-        new_rule.append(right_token)
-
-    return new_rule
+        index += 1
+ 
+    return rule
 
 def parse_negative(rule):
-    new_rule = []
-    should_pass_next = False
-
     if len(rule) < 2:
         return rule
 
+    index = 0
     for token, next_token in util.get_two_by_two(rule):
-        if should_pass_next:
-            should_pass_next = False
-            continue
         if token == "!" and (isinstance(next_token, Fact) or issubclass(next_token, operations.Operator)):
             obj = operations.Not(next_token)
-            new_rule.append(obj)
-            should_pass_next = True
-        else:
-            new_rule.append(token)
-    if not should_pass_next:
-        new_rule.append(next_token)
-    return new_rule
+            rule[index:index+2] = [obj]
+            return parse_negative(rule)
+        index += 1
+
+    return rule
 
 
