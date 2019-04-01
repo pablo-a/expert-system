@@ -137,3 +137,23 @@ def translate(tab):  # Tranform all litteral expression in symbol expression
 		if i in tab.lower():
 			tab = tab.replace(i, operand_n[operand_l.index(i)])
 	return tab.strip()
+
+# TODO: Implement
+def break_input_statement_type(input):
+    """
+        Return sorted statement from input file.
+        Output : [[rules], [facts], [query]]
+    """
+    rules = []
+    facts = []
+    query = []
+
+    for line in input:
+        if "=>" in line or "<=>" in line:
+            rules.append(line)
+        elif "=" in line:
+            facts.append(line)
+        elif "?" in line:
+            query.append(line)
+
+    return [rules, facts, query]

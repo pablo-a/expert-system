@@ -10,7 +10,7 @@ class Fact:
         self.checked = False
 
     def __str__(self):
-        return self.name
+        return f"Fact({self.name})"
 
     def resolve_to_true(self):
         "Backward resolution, return True or False"
