@@ -1,4 +1,5 @@
 from fact import Fact
+from termcolor import colored
 import operations
 import util
 import logging
@@ -95,8 +96,12 @@ def parse_conclusion(engine, conclusions):
     "return an array of Facts from conclusion"
     tokens = conclusions.split()
     convert_to_fact_instances(engine, tokens)
-    if len(tokens) == 1:
-        return tokens
+    parsed = parse_operations_priority(tokens)
+    logging.critical(colored(f"{util.print_list(parsed)}", "magenta"))
+
+
+    if len(parsed) == 1:
+        return parsed
     for token in tokens:
         pass
     return []
