@@ -69,6 +69,8 @@ class Engine:
         for query in self.query:
             print(colored(f"\nAnswer for {query} :", "green"))
             solution = self.solve_fact(query)
+            if solution:
+                self.add_facts(query.name)
             print(colored(f"{query} is then {solution}", "red"))
             self.already_checked = []
             
@@ -77,16 +79,17 @@ class Engine:
             Check if a Fact is true or not based on rules & 
             knowledge base. Returns True or False
         """
-        # Stop if we have already been here
-        if fact.name in self.already_checked:
-            print("\tAlready been here, stopping.")
-            return False
-        self.already_checked.append(fact.name)
 
         # Check if Fact in knowledge Base
         if self.fact_is_true(fact):
             return True
 
+        # Stop if we have already been here
+        if fact.name in self.already_checked:
+            print("\tAlready been here, stopping.")
+            return False
+        self.already_checked.append(fact.name)
+        
         # find a rule to prove fact.
         try:
             rule = self.get_rule(fact)
