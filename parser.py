@@ -94,16 +94,12 @@ def parse_all_rules(engine, input):
 # TODO: Implement
 def parse_conclusion(engine, conclusions):
     "return an array of Facts from conclusion"
-    tokens = conclusions.split()
-    convert_to_fact_instances(engine, tokens)
-    parsed = parse_operations_priority(tokens)
-    logging.critical(colored(f"{util.print_list(parsed)}", "magenta"))
+    parsed = parse_rule(engine, conclusions)
+    logging.critical(colored(f"{parsed}", "magenta"))
 
 
-    if len(parsed) == 1:
-        return parsed
-    for token in tokens:
-        pass
+    if isinstance(parsed, Fact):
+        return [parsed]
     return []
 
 
