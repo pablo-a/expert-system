@@ -1,5 +1,7 @@
 from fact import Fact
 from termcolor import colored
+from exception import ParsingError
+import parse
 import operations
 import util
 import logging
@@ -59,6 +61,10 @@ def cut_statement(input):
         splitted = statement.split(" => ")
         rule = splitted[0]
         conclusion = splitted[1]
+        # Check validity of parenthesis on both segment.
+        parse.validParenthesis([rule])
+        parse.validParenthesis([conclusion])
+        # new assignment
         new_statement = {"rule": rule, "conclusion": conclusion}
         tokenized_input.append(new_statement)
     return tokenized_input
@@ -98,7 +104,7 @@ def parse_conclusion(engine, conclusions):
     logging.debug(colored(f"PARSING CONCLUSIONS", "green"))
     logging.debug(colored(f"{parsed}", "magenta"))
     simplified = simplify_conclusions([parsed], [])
-    logging.debug(colored(f"{util.print_list(simplified)}\n", "cyan"))
+    # logging.debug(colored(f"{util.print_list(simplified)}\n", "cyan"))
 
     return simplified
 
@@ -146,8 +152,9 @@ def parse_rule(engine, rule):
     if len(rule) == 1:
         logging.debug(f"parsed operations : {util.print_list(rule)}")
         return rule[0]
-    logging.critical(f"rule before parsing : {util.print_list(rule)}\n"
-                f"rule after operation parsing : {util.print_list(rule)}")
+    else:
+        msg = f"Error : Cannot simplify rule more\n{util.print_list(rule)}"
+        raise ParsingError(msg)
     return []
 
 def convert_to_fact_instances(engine, tokens):

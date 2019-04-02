@@ -11,5 +11,6 @@ def print_list(some_list):
     string = "\t["
     for elem in some_list[:-1]:
         string += f"{elem}, "
-    string += f"{some_list[-1]}]"
+    if len(some_list) >=1:
+        string += f"{some_list[-1]}]"
     return string
