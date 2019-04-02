@@ -18,14 +18,14 @@ def main(file_path):
 
     setup_logging()
 
-    # Parsing
     try:
+        # Parsing
         parse.parse_file(file_path, tab)
+        # break into different type of statements
+        rules, facts, query = parse.break_input_statement_type(tab)
     except ParsingError as e:
         exit(e)
 
-    # break into different type of statements
-    rules, facts, query = parse.break_input_statement_type(tab)
     logging.info(colored(f"\nrules : {rules}\nfacts: {facts}\nquery: {query}\n", "yellow"))
 
     # setup engine
