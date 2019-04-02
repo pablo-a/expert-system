@@ -42,14 +42,14 @@ def del_same(tab):  # Delete same line in tab
 				tab.remove(first)
 
 def validParenthesis(tab):
-    for line in tab:
-        if '(' in line:
-            countop = line.count('(')
-            countclose = line.count(')')
-            if countop - countclose != 0:
-                raise_parsing_error("Error: Missing parenthesis")
-            if matchingParenthesis(line) == False:
-                raise_parsing_error("Error: Bad parenthesis")
+	for line in tab:
+		if '(' in line or ')' in line:
+			countop = line.count('(')
+			countclose = line.count(')')
+			if countop - countclose != 0:
+				raise_parsing_error("Error: Missing parenthesis")
+			if matchingParenthesis(line) == False:
+				raise_parsing_error("Error: Bad parenthesis")
 			
 def matchingParenthesis(string):
 	nb = 0
