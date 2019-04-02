@@ -47,7 +47,7 @@ def validParenthesis(tab):
 			countop = line.count('(')
 			countclose = line.count(')')
 			if countop - countclose != 0:
-				raise_parsing_error("Error: Missing parenthesis")
+				raise_parsing_error(f"Error: Missing parenthesis : {line}")
 			if matchingParenthesis(line) == False:
 				raise_parsing_error("Error: Bad parenthesis")
 			

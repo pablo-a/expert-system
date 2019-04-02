@@ -62,8 +62,8 @@ def cut_statement(input):
         rule = splitted[0]
         conclusion = splitted[1]
         # Check validity of parenthesis on both segment.
-        parse.validParenthesis(rule)
-        parse.validParenthesis(conclusion)
+        parse.validParenthesis([rule])
+        parse.validParenthesis([conclusion])
         # new assignment
         new_statement = {"rule": rule, "conclusion": conclusion}
         tokenized_input.append(new_statement)
