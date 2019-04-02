@@ -66,13 +66,16 @@ class Engine:
 
     ########################## SOLVING ########################################
     def solve(self):
+        solutions = []
         for query in self.query:
             print(colored(f"\nAnswer for {query} :", "green"))
             solution = self.solve_fact(query)
+            solutions.append(solution)
             if solution:
                 self.add_facts(query.name)
             print(colored(f"{query} is then {solution}", "red"))
             self.already_checked = []
+        return solutions
             
     def solve_fact(self, fact):
         """
