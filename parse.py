@@ -26,14 +26,23 @@ def check(file_path, tab):
 
 def parse_tab(tab):
     # rules must be unique
-    del_same(tab)
+	del_same(tab)
     # parenthesis analysis
     #not_assigned(tab)
-    validParenthesis(tab)
+	validParenthesis(tab)
     # Check if all steps are here (rules, facts, target)
-    min_step(tab)
+	min_step(tab)
+	# check for two consecutive letters
+	doubleLetter(tab)
     # Merge multiline facts/questions in 1 token
-    concat_list(tab)
+	concat_list(tab)
+
+def doubleLetter(tab): # Check for two letters consecutively
+	for line in tab:
+		for i in range(1, len(line)):
+			if line[i-1].isalpha() and line[i].isalpha():
+				if line[0] != "=" and line[0] != "?" and line[0] != "(":
+					raise_parsing_error(f"Error: two consecutive facts in line: {line}")
 
 def del_same(tab):  # Delete same line in tab
 	for val, second in enumerate(tab):
