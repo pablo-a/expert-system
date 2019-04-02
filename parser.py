@@ -76,8 +76,9 @@ def check_negative_operator(rules):
     for statement in rules:
         splitted = statement.split()
         for index, elem in enumerate(splitted):
-            if re.match(r"\![a-zA-Z]$", elem):
-                splitted[index:index+1] = ["!", elem[1]]
+            if re.match(r".*?\![a-zA-Z]$", elem):
+                cut = split_operator("!", elem)
+                splitted[index:index+1] = cut
         joined = " ".join(splitted)
         new_rules.append(joined)
     return new_rules
@@ -227,6 +228,7 @@ def split_operator(operator, token):
 def parse_operations_priority(tokens):
     if len(tokens) == 0:
         return []
+
     tokens = parse_negative(tokens)
     logging.debug(f"remove negation literals : {util.print_list(tokens)}")
     for operator, op_class in zip(operation_priority, operation_classes):
@@ -256,7 +258,7 @@ def parse_negative(rule):
 
     index = 0
     for token, next_token in util.get_two_by_two(rule):
-        if token == "!" and (isinstance(next_token, Fact) or issubclass(next_token, operations.Operator)):
+        if token == "!" and not isinstance(next_token, str) and (isinstance(next_token, Fact) or issubclass(type(next_token), operations.Operator)):
             obj = operations.Not(next_token)
             rule[index:index+2] = [obj]
             return parse_negative(rule)
