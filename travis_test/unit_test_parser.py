@@ -7,25 +7,25 @@ data = [
     {
         "statement": "A <=> B",
         "result": True,
-        "reversed": "B <=> A",
+        "reversed": "B => A",
         "cut": {"rule": "A", "conclusion": "B"}
     },
     {
         "statement": "A + C <=> B",
         "result": True,
-        "reversed": "B <=> A + C",
+        "reversed": "B => A + C",
         "cut": {"rule": "A + C", "conclusion": "B"}
     },
     {
         "statement": "A | (A + A) <=> B",
         "result": True,
-        "reversed": "B <=> A | (A + A)",
+        "reversed": "B => A | (A + A)",
         "cut": {"rule": "A | (A + A)", "conclusion": "B"}
     },
     {
         "statement": "A <=> ! B",
         "result": True,
-        "reversed": "! B <=> A",
+        "reversed": "! B => A",
         "cut": {"rule": "A", "conclusion": "! B"}
     },
 ]
