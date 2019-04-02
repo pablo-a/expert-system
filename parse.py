@@ -138,7 +138,6 @@ def translate(tab):  # Tranform all litteral expression in symbol expression
 			tab = tab.replace(i, operand_n[operand_l.index(i)])
 	return tab.strip()
 
-# TODO: Implement
 def break_input_statement_type(input):
     """
         Return sorted statement from input file.
@@ -149,7 +148,7 @@ def break_input_statement_type(input):
     query = []
 
     for line in input:
-        if "=>" in line or "<=>" in line:
+        if ("=>" in line or "<=>" in line) and is_rule(line):
             rules.append(line)
         elif "=" in line:
             facts.append(line)
@@ -157,3 +156,12 @@ def break_input_statement_type(input):
             query.append(line)
 
     return [rules, facts, query]
+
+def is_rule(input):
+	op = "=>"
+	if "<=>" in input:
+		op = "<=>"
+	splitted = input.split(op)
+	without_empty = list(filter(None, splitted))
+	if len(without_empty) != 2:
+		raise_parsing_error("Operator should have data on both side.") 
