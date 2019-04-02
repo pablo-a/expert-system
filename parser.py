@@ -125,9 +125,17 @@ def parse_rule(engine, rule):
     logging.debug(f"Parsing Rule : \"{rule}\"")
 
     tokens = rule.split()
+
+    logging.debug(f"Split on whitespace : \"{tokens}\"")
+
+    # FUCKING TOKENIZE THOSE PARENTHESES INTO SINGLE ELEMENTS
+    tokens = tokenize_parenthesis(tokens, [])
+    logging.debug(f"Tokenize parenthesis : {tokens}")
+
     # literal to Object : "A" => Fact("A")
     convert_to_fact_instances(engine, tokens)
     logging.debug(f"Fact converted: {util.print_list(tokens)}")
+
 
     # remove parenthesis by simplifying content.
     tokens = parse_parenthesis(tokens)
@@ -138,7 +146,8 @@ def parse_rule(engine, rule):
     if len(rule) == 1:
         logging.debug(f"parsed operations : {util.print_list(rule)}")
         return rule[0]
-    logging.critical(f"rule before parsing : {util.print_list(rule)}\nrule after operation parsing : {util.print_list(rule)}")
+    logging.critical(f"rule before parsing : {util.print_list(rule)}\n"
+                f"rule after operation parsing : {util.print_list(rule)}")
     return []
 
 def convert_to_fact_instances(engine, tokens):
@@ -158,8 +167,6 @@ def convert_to_fact_instances(engine, tokens):
                 tokens[index] = Fact(elem, engine)
 
 def parse_parenthesis(rule):
-    if not "(" in rule:
-        return rule
     positions = []
     closing_bracket = -1
     for index, token in enumerate(rule):
@@ -182,7 +189,37 @@ def parse_parenthesis(rule):
     # Tail recursion : simplify the simplified rule until no parenthesis.
     return parse_parenthesis(rule)
 
+def tokenize_parenthesis(rule, new):
+    logging.debug(f"\tTokenizing parenthesis, rule = {rule}")
+    for elem in rule:
+        if elem != "(" and "(" in elem:
+            splitted = split_operator('(', elem)
+            new.extend(splitted)
+        elif elem != ")" and ")" in elem:
+            splitted = split_operator(')', elem)
+            new.extend(splitted)
+        else:
+            new.append(elem)
+    if len(new) != len(rule):
+        return tokenize_parenthesis(new, [])
+    return new
+
+def split_operator(operator, token):
+    splitted = []
+    tokens = token.split(operator)
+    for token in tokens[:-1]:
+        if token != "":
+            splitted.append(token)
+        splitted.append(operator)
+    if tokens[-1] != "":
+        splitted.append(tokens[-1])
+    return splitted
+    
+
+
 def parse_operations_priority(tokens):
+    if len(tokens) == 0:
+        return []
     tokens = parse_negative(tokens)
     logging.debug(f"remove negation literals : {util.print_list(tokens)}")
     for operator, op_class in zip(operation_priority, operation_classes):
