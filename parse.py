@@ -2,6 +2,7 @@ from main import operand_n, raise_parsing_error
 from exception import ParsingError
 import sys
 import os
+import re
 
 def parse_file(file_path, tab):
     check(file_path, tab)
@@ -37,8 +38,17 @@ def parse_tab(tab):
     # Merge multiline facts/questions in 1 token
 	concat_list(tab)
 
+def checkForNumbers(string):
+	i = 0
+	while i < len(string):
+		if string[i].isdigit():
+			raise_parsing_error(f"Error: bad char in line: {string}")
+		
+		i += 1
+
 def doubleLetter(tab): # Check for two letters consecutively
 	for line in tab:
+		checkForNumbers(line)
 		for i in range(1, len(line)):
 			if line[i-1].isalpha() and line[i].isalpha():
 				if line[0] != "=" and line[0] != "?" and line[0] != "(":
