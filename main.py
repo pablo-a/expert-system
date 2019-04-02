@@ -23,14 +23,11 @@ def main(file_path):
         parse.parse_file(file_path, tab)
         # break into different type of statements
         rules, facts, query = parse.break_input_statement_type(tab)
-    except ParsingError as e:
-        exit(e)
+        logging.info(colored(f"\nrules : {rules}\nfacts: {facts}\nquery: {query}\n", "yellow"))
 
-    logging.info(colored(f"\nrules : {rules}\nfacts: {facts}\nquery: {query}\n", "yellow"))
-
-    # setup engine
-    engine = Engine()
-    try:
+        # setup engine
+        engine = Engine()
+        # re parse rules
         parser.setup_engine_rules(engine, rules)
         parser.setup_engine_facts(engine, facts)
         parser.setup_engine_query(engine, query)
@@ -50,7 +47,7 @@ def setup_logging():
     # création de l'objet logger qui va nous servir à écrire dans les logs
     logger = logging.getLogger()
     # on met le niveau du logger à DEBUG, comme ça il écrit tout
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.WARNING)
 
 
 if __name__ == "__main__":
