@@ -164,4 +164,5 @@ def is_rule(input):
 	splitted = input.split(op)
 	without_empty = list(filter(None, splitted))
 	if len(without_empty) != 2:
-		raise_parsing_error("Operator should have data on both side.") 
+		raise_parsing_error("Operator should have data on both side.")
+	return True
