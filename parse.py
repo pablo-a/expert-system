@@ -1,8 +1,9 @@
-from main import operand_n, raise_parsing_error
-from exception import ParsingError
+from exception import ParsingError, raise_parsing_error
 import sys
 import os
 import re
+
+operand_n = ["!", "^", "=>", "<=>", "(", ")", "+", "|"]
 
 def parse_file(file_path, tab):
     check(file_path, tab)
