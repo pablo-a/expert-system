@@ -43,7 +43,7 @@ def setup_logging():
     # création de l'objet logger qui va nous servir à écrire dans les logs
     logger = logging.getLogger()
     # on met le niveau du logger à DEBUG, comme ça il écrit tout
-    logger.setLevel(logging.WARNING)
+    logger.setLevel(logging.CRITICAL)
 
 
 if __name__ == "__main__":
