@@ -1,3 +1,4 @@
+#Solution=True,True,True,True
 B => A
 D + E => B
 G + H => F

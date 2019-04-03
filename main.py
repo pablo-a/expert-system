@@ -37,17 +37,13 @@ def main(file_path):
     logging.info(colored(f"\n{engine}", "cyan"))
 
     # Solving
-    engine.solve()
-
-
-def raise_parsing_error(msg):
-    raise ParsingError(msg)
+    return engine.solve()
 
 def setup_logging():
     # création de l'objet logger qui va nous servir à écrire dans les logs
     logger = logging.getLogger()
     # on met le niveau du logger à DEBUG, comme ça il écrit tout
-    logger.setLevel(logging.WARNING)
+    logger.setLevel(logging.CRITICAL)
 
 
 if __name__ == "__main__":
