@@ -37,11 +37,7 @@ def main(file_path):
     logging.info(colored(f"\n{engine}", "cyan"))
 
     # Solving
-    engine.solve()
-
-
-def raise_parsing_error(msg):
-    raise ParsingError(msg)
+    return engine.solve()
 
 def setup_logging():
     # création de l'objet logger qui va nous servir à écrire dans les logs
