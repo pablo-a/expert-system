@@ -1,4 +1,5 @@
 from functools import reduce
+from termcolor import colored
 
 
 class Operator:
@@ -43,10 +44,14 @@ class And(Operator):
             Check if the different operands resolve to True
             A & B & C = True => AND(A, B, C) = True 
         """
+        print(colored(f"Checking {self}\n", attrs=['bold', 'underline']))
         for elem in self.operands:
-            print(f"Checking elem {elem}")
+            # print(f"Checking elem {elem}")
             if not elem.resolve_to_true():
+                print(colored(f"Since {elem} is False then {self} is False\n", attrs=[
+                      'bold', 'underline']))
                 return False
+        print(colored(f"{self} is True !\n", attrs=['bold', 'underline']))
         return True
 
     def __str__(self):
@@ -60,9 +65,14 @@ class Or(Operator):
             Check if the different operands resolve to True
             A | B | C = True => OR(A, B, C) = True 
         """
+        print(colored(f"Checking {self}\n", attrs=['bold', 'underline']))
         for elem in self.operands:
             if elem.resolve_to_true():
+                print(colored(f"Since {elem} is True then {self} is True\n", attrs=[
+                      'bold', 'underline']))
                 return True
+        print(colored(f"Since no element was True then {self} is False\n", attrs=[
+              'bold', 'underline']))
         return False
 
     def __str__(self):
@@ -75,8 +85,13 @@ class Xor(Operator):
         # How Reduce works ?
         # for array [a, b, c, d, e]
         # return a ^ b ^ c ^ d ^ e
+        print(colored(f"Checking {self}\n", attrs=['bold', 'underline']))
         resolved = list(map(lambda x: x.resolve_to_true(), self.operands))
-        return reduce(lambda x, y: x ^ y, resolved)
+        if reduce(lambda x, y: x ^ y, resolved):
+            print(colored(f"{self} is True\n", attrs=['bold', 'underline']))
+            return True
+        print(colored(f"{self} is False\n", attrs=['bold', 'underline']))
+        return False
 
     def __str__(self):
         content = super().__str__()
@@ -89,7 +104,12 @@ class Not(Operator):
 
     def resolve_to_true(self):
         # return True if operand is False.
-        return not self.operand.resolve_to_true()
+        print(colored(f"Checking {self}\n", "green"))
+        if self.operand.resolve_to_true():
+            print(colored(f"{self} is False\n", "red"))
+            return False
+        print(colored(f"{self} is True\n", "red"))
+        return True
 
     def __str__(self):
         return f"NOT({self.operand})"
