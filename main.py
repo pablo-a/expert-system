@@ -6,7 +6,6 @@ import logging
 import parse
 import parser
 from engine import Engine
-from rules_json import rules_json
 from exception import ParsingError
 
 # 	List of all symbols possibility
