@@ -19,6 +19,9 @@ def setup_engine_rules(engine, input):
     logging.debug(f"SETUP ENGINE RULES\n")
     logging.debug(f"non parsed rules : {util.print_list(input)}")
 
+    input = add_space_between_tokens(input)
+    logging.debug(f"after Tokenizer: {input}")
+
     input_without_bi = handle_biconditional(engine, input)
     logging.debug(f"handle <=> : {util.print_list(input_without_bi)}")
 
@@ -27,6 +30,29 @@ def setup_engine_rules(engine, input):
 
     tokenized_input = cut_statement(split_neg_operator)
     parse_all_rules(engine, tokenized_input)
+
+# do not add space between :
+# =>, <=>
+def add_space_between_tokens(input):
+    spaced_input = []
+    for line in input:
+        spaced_line = ""
+
+        splitter = "<=>" if "<=>" in line else "=>"
+        line_parts = line.split(splitter)
+        for part in line_parts:
+            # add each char + space
+            for char in part:
+                spaced_line += char + " "
+            # add splitter
+            spaced_line += splitter + " "
+        # remove last splitter
+        spaced_line = spaced_line[:-len(splitter) -2]
+        
+        #save line
+        spaced_input.append(spaced_line)
+    return spaced_input
+
 
 ########################### BICONDITIONAL #####################################
 
